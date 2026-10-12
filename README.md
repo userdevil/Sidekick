@@ -1,6 +1,6 @@
 # 💧 Sidekick — Animated Desktop Mascot & Companion
 
-**Sidekick** is a customizable Windows desktop companion that walks onto your screen to remind you to drink water and take healthy breaks. Built with Python and Tkinter, it supports custom character avatars, interactive speech bubbles, and emotional animated reactions.
+**Sidekick** is a customizable Windows desktop companion that walks onto your screen to remind you to drink water and take healthy breaks. Built with Python and Tkinter, it supports **both custom photo avatars and real video clips**, interactive speech bubbles, and emotional animated reactions.
 
 ![Platform](https://img.shields.io/badge/Platform-Windows-blue) ![Python](https://img.shields.io/badge/Python-3.9+-brightgreen) ![License](https://img.shields.io/badge/License-MIT-purple)
 
@@ -9,7 +9,7 @@
 ## ✨ Features & Animation Flow
 
 1. **🚶‍♂️ Walks In from Left**:
-   - The cutout character walks in from the left edge of your screen with rhythmic stride bobbing, swaying tilt, and footstep ripples.
+   - The character (from video or cutout photo) walks in from the left edge of your screen with rhythmic stride bobbing, swaying tilt, and footstep ripples.
    - Stops above your Windows taskbar.
 
 2. **💬 Interactive Speech Bubble**:
@@ -34,18 +34,40 @@
    - Turns around to face left.
    - **Walks back to the left sadly** with slow, heavy, dejected footsteps.
 
-5. **⚙️ Settings Window**:
+5. **🎥 Video Character Mode (New!)**:
+   - Drop your own video clips directly into the project folder:
+     - `walk.mp4` / `walk.gif` — Played during the walk-in animation.
+     - `happy.mp4` / `happy.gif` — Played during the positive reaction and run.
+     - `sad.mp4` / `sad.gif` — Played during the negative sad walk-back.
+     - `character.mp4` / `character.gif` — Universal single-video fallback.
+   - **Green-Screen Chroma Key**: Automatically removes green backgrounds so your video character floats seamlessly on the desktop.
+   - If no video files are present, it seamlessly falls back to the high-res cutout photo sprites!
+
+6. **⚙️ Settings Window**:
    - Customize interval (1–120 minutes) with quick-set presets (`5m`, `15m`, `30m`, `45m`, `60m`, `90m`).
    - Sound notification toggle.
    - **"🔔 Test" button**: immediately triggers the walk-in animation so you can test either response anytime!
    - Settings persist to `~/.sidekick/config.json`.
 
-6. **📌 System Tray**:
+7. **📌 System Tray**:
    - Runs in the Windows system tray with a water droplet icon.
    - Right-click tray menu:
      - `💧 Drink Water Now!` (Triggers animation immediately)
      - `⚙ Settings`
      - `❌ Quit`
+
+---
+
+## 🎬 How to Use Your Own Video Clips
+
+1. Record or export short clips (2–4 seconds each, 24–30 FPS).
+2. For best results, use a green background or solid backdrop so the app can key out the background.
+3. Save the files into the root folder using any of these names:
+   - `walk.mp4` (or `.gif`, `.webm`)
+   - `happy.mp4`
+   - `sad.mp4`
+   *(or simply `character.mp4` for a single universal loop)*
+4. Run Sidekick — it will automatically detect and play the video frames!
 
 ---
 
@@ -78,6 +100,7 @@ Sidekick/
 ├── main.pyw           # App entry point (.pyw = silent background)
 ├── app.py             # Controller, timer loop & system tray integration
 ├── popup.py           # Animated walking mascot & interactive speech bubble
+├── video_character.py # Video player, chroma-key & frame extraction engine
 ├── character_loader.py# Sprite processor & frame transform cache
 ├── settings_ui.py     # Settings window (interval, sounds, test trigger)
 ├── config.py          # JSON configuration persistence

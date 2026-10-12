@@ -1,3 +1,8 @@
-# Required for system tray icon (optional — app works without these)
+# Desktop UI & System Tray
 pystray>=0.19
 Pillow>=10.0
+
+# Video Character Engine & Chroma-Key
+opencv-python>=4.5
+numpy>=1.20
+

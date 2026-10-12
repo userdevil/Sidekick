@@ -28,6 +28,7 @@ except ImportError:
     HAS_SOUND = False
 
 from character_loader import SpriteManager
+from video_character import VideoCharacterManager
 
 
 class WalkingCharacterWindow:
@@ -56,6 +57,7 @@ class WalkingCharacterWindow:
         self.on_settings = on_settings
 
         self.sprite_mgr = SpriteManager(root)
+        self.video_mgr = VideoCharacterManager(root)
 
         # Coordinate setup
         self.win = tk.Toplevel(root)
@@ -116,6 +118,14 @@ class WalkingCharacterWindow:
     #  Canvas Elements Setup
     # ══════════════════════════════════════════════════════════════════
 
+    def _get_active_frame(self, action, facing_right=True, angle_deg=0.0, is_sad=False):
+        """Retrieve video frame if available, otherwise fallback to procedural sprite."""
+        if self.video_mgr.has_video_support():
+            frame = self.video_mgr.get_frame(action, self.frame_count, facing_right=facing_right)
+            if frame is not None:
+                return frame
+        return self.sprite_mgr.get_frame(facing_right=facing_right, angle_deg=angle_deg, is_sad=is_sad)
+
     def _build_static_canvas(self):
         # 1. Ground Shadow
         self.shadow_item = self.c.create_oval(
@@ -124,7 +134,7 @@ class WalkingCharacterWindow:
             fill='#B0BEC5', outline='', tags='shadow')
 
         # 2. Character Sprite
-        initial_frame = self.sprite_mgr.get_frame(facing_right=True, angle_deg=0)
+        initial_frame = self._get_active_frame('walk', facing_right=True, angle_deg=0)
         self.current_char_image = initial_frame
         self.char_item = self.c.create_image(
             self.char_cx, self.char_cy, image=self.current_char_image, tags='char')
@@ -324,7 +334,7 @@ class WalkingCharacterWindow:
         self._move_window(self.current_x, current_y)
 
         # Update character frame
-        frame = self.sprite_mgr.get_frame(facing_right=True, angle_deg=sway_angle)
+        frame = self._get_active_frame('walk', facing_right=True, angle_deg=sway_angle)
         self._set_char_sprite(frame)
 
         # Shadow scales with bob
@@ -347,7 +357,7 @@ class WalkingCharacterWindow:
 
         # Gentle breathing bob
         bob_y = math.sin(self.idle_phase) * 3.0
-        frame = self.sprite_mgr.get_frame(facing_right=True, angle_deg=0.0)
+        frame = self._get_active_frame('idle', facing_right=True, angle_deg=0.0)
         self._set_char_sprite(frame)
 
         # Move character on canvas slightly for breathing
@@ -400,7 +410,7 @@ class WalkingCharacterWindow:
 
         # Excited slight rocking
         angle = math.sin(self.reaction_timer * 0.4) * 5.0
-        frame = self.sprite_mgr.get_frame(facing_right=True, angle_deg=angle)
+        frame = self._get_active_frame('happy', facing_right=True, angle_deg=angle)
         self._set_char_sprite(frame)
 
         self.c.coords(self.char_item, self.char_cx, self.char_cy + jump_y)
@@ -423,7 +433,7 @@ class WalkingCharacterWindow:
         bob_y = abs(math.sin(self.run_phase)) * 14.0
         lean_angle = -11.0  # forward sprint lean
 
-        frame = self.sprite_mgr.get_frame(facing_right=True, angle_deg=lean_angle)
+        frame = self._get_active_frame('happy', facing_right=True, angle_deg=lean_angle)
         self._set_char_sprite(frame)
 
         current_y = self.ground_y - bob_y
@@ -448,7 +458,7 @@ class WalkingCharacterWindow:
         droop_y = t * 8.0
 
         # Sad slouch frame
-        frame = self.sprite_mgr.get_frame(facing_right=True, angle_deg=2.0, is_sad=True)
+        frame = self._get_active_frame('sad', facing_right=True, angle_deg=2.0, is_sad=True)
         self._set_char_sprite(frame)
         self.c.coords(self.char_item, self.char_cx, self.char_cy + droop_y)
 
@@ -472,7 +482,7 @@ class WalkingCharacterWindow:
         slump_angle = 3.5  # head down forward tilt facing left
 
         # Left-facing sad frame
-        frame = self.sprite_mgr.get_frame(facing_right=False, angle_deg=slump_angle, is_sad=True)
+        frame = self._get_active_frame('sad', facing_right=False, angle_deg=slump_angle, is_sad=True)
         self._set_char_sprite(frame)
 
         current_y = self.ground_y - bob_y
