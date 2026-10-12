@@ -1,0 +1,15 @@
+{
+  "name": "sidekick-desktop",
+  "version": "1.0.0",
+  "description": "Animated Desktop Mascot & Hydration Companion",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": ["desktop", "mascot", "companion", "health", "water-reminder"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^35.0.0"
+  }
+}

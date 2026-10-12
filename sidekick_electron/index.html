@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sidekick</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 380px;
+      height: 430px;
+      overflow: hidden;
+      background: transparent;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    #container {
+      position: relative;
+      width: 380px;
+      height: 430px;
+    }
+
+    /* Particles & Visuals Canvas */
+    #fx-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 380px;
+      height: 430px;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Ground Shadow */
+    #shadow {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 96px;
+      height: 14px;
+      background: rgba(144, 164, 174, 0.45);
+      border-radius: 50%;
+      transition: width 0.05s ease-out;
+      z-index: 1;
+    }
+
+    /* Mascot Character */
+    #mascot-wrapper {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      z-index: 5;
+      transform-origin: bottom center;
+    }
+    #character-canvas {
+      width: 220px;
+      height: 300px;
+      display: block;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+    }
+    #character-canvas.sad-tint {
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15)) hue-rotate(180deg) saturate(0.8);
+    }
+
+    /* Glasses Star Glint */
+    .glint {
+      position: absolute;
+      font-size: 20px;
+      font-weight: bold;
+      color: #FFF9C4;
+      text-shadow: 0 0 4px #FFEE58;
+      display: none;
+      z-index: 15;
+    }
+    #glint-left {
+      bottom: 200px;
+      left: 165px;
+    }
+    #glint-right {
+      bottom: 200px;
+      left: 195px;
+    }
+
+    /* Floating Water Buddy */
+    #water-buddy {
+      position: absolute;
+      bottom: 215px;
+      right: 75px;
+      width: 28px;
+      height: 34px;
+      display: none;
+      z-index: 12;
+    }
+
+    /* Speech Bubble */
+    #bubble-container {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      z-index: 20;
+    }
+    #speech-bubble {
+      width: 330px;
+      background: #FFFFFF;
+      border: 2.5px solid #0288D1;
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 12px rgba(69, 90, 100, 0.25);
+      position: relative;
+    }
+    #bubble-text {
+      font-size: 13.5px;
+      font-weight: bold;
+      color: #1E293B;
+      text-align: center;
+      line-height: 1.35;
+      margin-bottom: 10px;
+      min-height: 38px;
+      white-space: pre-line;
+      padding-right: 20px;
+    }
+    #bubble-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    .btn {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 12.5px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-positive {
+      background: #0288D1;
+      color: white;
+      box-shadow: 0 2px 4px rgba(2, 136, 209, 0.3);
+    }
+    .btn-positive:hover {
+      background: #039BE5;
+      transform: translateY(-1px);
+    }
+    .btn-negative {
+      background: #FFF1F2;
+      color: #BE123C;
+      border: 1px solid #FDA4AF;
+    }
+    .btn-negative:hover {
+      background: #FFE4E6;
+      transform: translateY(-1px);
+    }
+    #btn-settings {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      color: #64748B;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    #btn-settings:hover {
+      background: #E2E8F0;
+    }
+    /* Pointer triangle */
+    #bubble-pointer {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 12px solid #0288D1;
+      margin-top: -1px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <canvas id="fx-canvas" width="380" height="430"></canvas>
+    <div id="shadow"></div>
+
+    <div id="mascot-wrapper">
+      <canvas id="character-canvas" width="440" height="600"></canvas>
+      <video id="video-source" playsinline muted autoplay preload="auto" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></video>
+    </div>
+
+    <!-- Glints -->
+    <div id="glint-left" class="glint">✦</div>
+    <div id="glint-right" class="glint">✦</div>
+
+    <!-- Water Buddy SVG -->
+    <div id="water-buddy">
+      <svg viewBox="0 0 28 34" width="28" height="34">
+        <!-- Body -->
+        <path d="M14 2 C24 13, 24 22, 14 32 C4 22, 4 13, 14 2 Z" fill="#4FC3F7" stroke="#0288D1" stroke-width="1.8"/>
+        <!-- Eyes -->
+        <ellipse cx="10" cy="18" rx="1.6" ry="2.2" fill="#1A237E"/>
+        <ellipse cx="18" cy="18" rx="1.6" ry="2.2" fill="#1A237E"/>
+        <!-- Smile -->
+        <path d="M10 22 Q14 26 18 22" stroke="#E91E63" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- Speech Bubble -->
+    <div id="bubble-container">
+      <div id="speech-bubble">
+        <div id="btn-settings" title="Settings">⚙</div>
+        <div id="bubble-text"></div>
+        <div id="bubble-buttons">
+          <button class="btn btn-positive" id="btn-yes">💧 Yes, drank!</button>
+          <button class="btn btn-negative" id="btn-no">😢 Not yet</button>
+        </div>
+      </div>
+      <div id="bubble-pointer"></div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

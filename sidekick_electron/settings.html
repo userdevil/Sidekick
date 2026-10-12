@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>💧 Sidekick Settings</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+    body {
+      margin: 0;
+      padding: 22px 24px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #E3F2FD;
+      color: #37474F;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    h2 {
+      margin: 0;
+      color: #1565C0;
+      font-size: 20px;
+    }
+    .subtitle {
+      font-size: 12px;
+      font-style: italic;
+      color: #78909C;
+      margin-top: 4px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid #BBDEFB;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+    .card-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: #1565C0;
+    }
+    .card-value {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #37474F;
+    }
+    input[type=range] {
+      width: 100%;
+      accent-color: #1565C0;
+      cursor: pointer;
+    }
+    .pills {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      justify-content: space-between;
+    }
+    .pill {
+      background: #BBDEFB;
+      color: #1565C0;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pill:hover, .pill.active {
+      background: #1565C0;
+      color: white;
+    }
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      margin: 14px 4px;
+      cursor: pointer;
+    }
+    .checkbox-row input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #1565C0;
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      margin-top: 18px;
+    }
+    .btn {
+      padding: 7px 18px;
+      font-size: 13px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: all 0.15s;
+    }
+    .btn-test {
+      background: #C8E6C9;
+      color: #2E7D32;
+      border: 1px solid #A5D6A7;
+    }
+    .btn-test:hover {
+      background: #A5D6A7;
+    }
+    .spacer {
+      flex: 1;
+    }
+    .btn-cancel {
+      background: transparent;
+      color: #546E7A;
+      margin-right: 8px;
+    }
+    .btn-cancel:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    .btn-save {
+      background: #1E88E5;
+      color: white;
+    }
+    .btn-save:hover {
+      background: #1565C0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>💧 Sidekick Settings</h2>
+    <div class="subtitle">Stay hydrated, stay healthy!</div>
+  </div>
+
+  <!-- Interval -->
+  <div class="card">
+    <div class="card-title-row">
+      <div class="card-title">⏱ Reminder Interval</div>
+      <div class="card-value" id="interval-label">Every 30 minutes</div>
+    </div>
+    <input type="range" id="interval-slider" min="1" max="120" value="30">
+    <div class="pills">
+      <div class="pill" data-val="5">5m</div>
+      <div class="pill" data-val="15">15m</div>
+      <div class="pill" data-val="30">30m</div>
+      <div class="pill" data-val="45">45m</div>
+      <div class="pill" data-val="60">60m</div>
+      <div class="pill" data-val="90">90m</div>
+    </div>
+  </div>
+
+  <!-- Duration -->
+  <div class="card">
+    <div class="card-title-row">
+      <div class="card-title">🕐 Popup Duration</div>
+      <div class="card-value" id="duration-label">15 seconds</div>
+    </div>
+    <input type="range" id="duration-slider" min="5" max="60" value="15">
+  </div>
+
+  <!-- Sound Toggle -->
+  <label class="checkbox-row">
+    <input type="checkbox" id="sound-checkbox" checked>
+    <span>🔊 Play notification sound</span>
+  </label>
+
+  <!-- Buttons -->
+  <div class="actions">
+    <button class="btn btn-test" id="btn-test">🔔 Test</button>
+    <div class="spacer"></div>
+    <button class="btn btn-cancel" id="btn-cancel">Cancel</button>
+    <button class="btn btn-save" id="btn-save">💾 Save</button>
+  </div>
+
+  <script src="settings.js"></script>
+</body>
+</html>

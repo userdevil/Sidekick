@@ -20,3 +20,13 @@ ENV/
 # OS files
 Thumbs.db
 Desktop.ini
+
+# Node / Electron
+node_modules/
+npm-debug.log
+
+# Flutter
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies

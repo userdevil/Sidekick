@@ -1,8 +1,8 @@
 # 💧 Sidekick — Animated Desktop Mascot & Companion
 
-**Sidekick** is a customizable Windows desktop companion that walks onto your screen to remind you to drink water and take healthy breaks. Built with Python and Tkinter, it supports **both custom photo avatars and real video clips**, interactive speech bubbles, and emotional animated reactions.
+**Sidekick** is a customizable Windows desktop companion that walks onto your screen to remind you to drink water and take healthy breaks. It now features an **Electron desktop app** with **real-time GPU green-screen video chroma-key**, a **Flutter for Windows** edition, and the original Python/Tkinter companion.
 
-![Platform](https://img.shields.io/badge/Platform-Windows-blue) ![Python](https://img.shields.io/badge/Python-3.9+-brightgreen) ![License](https://img.shields.io/badge/License-MIT-purple)
+![Platform](https://img.shields.io/badge/Platform-Windows-blue) ![Electron](https://img.shields.io/badge/Electron-35+-brightgreen) ![Flutter](https://img.shields.io/badge/Flutter-3.41+-cyan) ![Python](https://img.shields.io/badge/Python-3.9+-green) ![License](https://img.shields.io/badge/License-MIT-purple)
 
 ---
 
@@ -71,24 +71,46 @@
 
 ---
 
-## 🚀 Quick Start
+---
 
-### 1. Clone the repository
+## ⚡ Quick Start Options
+
+### Option A: Electron Edition (Recommended for Green-Screen Videos)
+Features WebGL real-time green-screen chroma key at 60 FPS, transparent overlay window, click-through, and system tray.
+
 ```bash
-git clone https://github.com/userdevil/Sidekick.git
-cd Sidekick
+cd sidekick_electron
+npm install
+npm start
 ```
+*(Or double-click `run.bat` in `sidekick_electron/`)*
 
-### 2. Install dependencies
+**Included Video Mapping (`assets/videos/`):**
+- `water_3.mp4` — Mascot walking intro (left to right onto screen)
+- `water_2.mp4` — Drinking water idle loop while asking the hydration question
+- `water_4.mp4` — Continuous happy walk across the screen on positive response ("Yes, drank!")
+- `water_1.mp4` — Sad walk back off screen on negative response ("Not yet")
+
+---
+
+### Option B: Python Edition
+Lightweight Tkinter companion with PIL sprites & OpenCV chroma keying.
+
 ```bash
 pip install -r requirements.txt
-```
-
-### 3. Run Sidekick
-- **Double-click:** `install_and_run.bat`
-- **Or via command line (background mode, no console window):**
-```bash
 pythonw main.pyw
+```
+*(Or double-click `install_and_run.bat`)*
+
+---
+
+### Option C: Flutter Edition
+Native Flutter desktop companion with smooth custom particle shaders and window controls.
+
+```bash
+cd sidekick_flutter
+flutter pub get
+flutter run -d windows
 ```
 
 ---
@@ -97,19 +119,23 @@ pythonw main.pyw
 
 ```
 Sidekick/
-├── main.pyw           # App entry point (.pyw = silent background)
-├── app.py             # Controller, timer loop & system tray integration
-├── popup.py           # Animated walking mascot & interactive speech bubble
-├── video_character.py # Video player, chroma-key & frame extraction engine
-├── character_loader.py# Sprite processor & frame transform cache
-├── settings_ui.py     # Settings window (interval, sounds, test trigger)
-├── config.py          # JSON configuration persistence
-├── character_right.png# Right-facing character sprite
-├── character_left.png # Left-facing character sprite
-├── character_clean.png# Clean cutout character
-├── requirements.txt   # Python dependencies
-├── install_and_run.bat# One-click Windows launcher
-└── README.md          # Documentation
+├── sidekick_electron/     # ⚡ Electron desktop app with WebGL Chroma-Key
+│   ├── assets/videos/     # 4 green-screen video loops (water_1 to water_4)
+│   ├── main.js            # Transparent borderless overlay & IPC
+│   ├── renderer.js        # WebGL real-time green-screen shader & mascot controller
+│   ├── settings.html      # Glassmorphic settings panel
+│   └── run.bat            # Quick launcher
+├── sidekick_flutter/      # 📱 Flutter Windows desktop edition
+│   ├── lib/               # Clean architecture (models, services, ui)
+│   └── windows/           # Win32 runner & window management
+├── main.pyw               # Python app entry point (.pyw = silent background)
+├── app.py                 # Python controller, timer loop & system tray integration
+├── popup.py               # Animated walking mascot & interactive speech bubble
+├── video_character.py     # Video player & chroma-key engine
+├── character_loader.py    # Sprite processor & transform cache
+├── settings_ui.py         # Settings window
+├── config.py              # Configuration persistence
+└── README.md              # Documentation
 ```
 
 ---
@@ -121,3 +147,4 @@ Sidekick is designed to grow into an intelligent desktop companion:
 - **Voice Interactions**: AI text-to-speech for vocal greetings and voice check-ins.
 - **Vision Tracking**: Lightweight webcam posture & hydration detection.
 - **Productivity Agent**: Meeting reminders, focus timers, and daily motivation check-ins.
+

@@ -1,0 +1,3 @@
+@echo off
+echo Starting Sidekick (Electron Desktop Companion)...
+npm start
